@@ -6,6 +6,12 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Mimi.DBpedia.Access\Mimi.DBpedia.Access.csproj" />
+    <ProjectReference Include="..\Mimi.Model\Mimi.Model.csproj" />
   </ItemGroup>
 
 </Project>

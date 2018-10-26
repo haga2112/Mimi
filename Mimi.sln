@@ -3,9 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2041
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MimiWeb", "MimiWeb\MimiWeb.csproj", "{6401ECB0-ED7E-4A67-96FC-48E3A1B03F39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MimiWeb", "MimiWeb\MimiWeb.csproj", "{6401ECB0-ED7E-4A67-96FC-48E3A1B03F39}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp", "ConsoleApp\ConsoleApp.csproj", "{A86C54D5-E1A3-4B32-84C9-AB3E6DDD1608}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp", "ConsoleApp\ConsoleApp.csproj", "{A86C54D5-E1A3-4B32-84C9-AB3E6DDD1608}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mimi.DBpedia.Access", "Mimi.DBpedia.Access\Mimi.DBpedia.Access.csproj", "{4CD79133-DBA3-4A3F-B12E-06E0CCFAFB79}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mimi.Model", "Mimi.Model\Mimi.Model.csproj", "{D35674E2-9324-4AFE-9DC0-C367DF09ED1C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{A86C54D5-E1A3-4B32-84C9-AB3E6DDD1608}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A86C54D5-E1A3-4B32-84C9-AB3E6DDD1608}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A86C54D5-E1A3-4B32-84C9-AB3E6DDD1608}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CD79133-DBA3-4A3F-B12E-06E0CCFAFB79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CD79133-DBA3-4A3F-B12E-06E0CCFAFB79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CD79133-DBA3-4A3F-B12E-06E0CCFAFB79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CD79133-DBA3-4A3F-B12E-06E0CCFAFB79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D35674E2-9324-4AFE-9DC0-C367DF09ED1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D35674E2-9324-4AFE-9DC0-C367DF09ED1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D35674E2-9324-4AFE-9DC0-C367DF09ED1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D35674E2-9324-4AFE-9DC0-C367DF09ED1C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

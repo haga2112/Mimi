@@ -1,0 +1,19 @@
+﻿
+@using Mimi.Model;
+
+@model CityInfo
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<h3>@Model.Name</h3>
+
+<h4>@Model.Summary</h4>
+
+@foreach (var poi in Model.PointOfInterests)
+{
+    <p>@poi.Label | @poi.TypeName | @poi.Resource</p>
+}

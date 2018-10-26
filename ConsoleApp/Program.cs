@@ -52,21 +52,28 @@ namespace ConsoleApp
             //var triples = g.Triples;
 
             //First define a SPARQL Endpoint for DBPedia
-            SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new Uri("http://dbpedia.org/sparql"));
+            //SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new Uri("http://dbpedia.org/sparql"));
 
-            //Next define our query
-            //We're going to ask DBPedia to describe the first thing it finds which is a Person
-            String query = "DESCRIBE ?person WHERE {?person a <http://dbpedia.org/ontology/Person>} LIMIT 1";
+            ////Next define our query
+            ////We're going to ask DBPedia to describe the first thing it finds which is a Person
+            //String query = "DESCRIBE ?person WHERE {?person a <http://dbpedia.org/ontology/Person>} LIMIT 1";
 
-            //Get the result
-            var g = endpoint.QueryWithResultGraph(query);
+            ////Get the result
+            //var g = endpoint.QueryWithResultGraph(query);
 
-            TripleStore store = new TripleStore();
-            Graph graph = new Graph();
-            var nTriplesParser = new NTriplesParser();
-            UriLoader.Load(graph, new Uri("http://dbpedia.org/resource/List_of_ongoing_armed_conflicts"), nTriplesParser);
-            store.Add(graph);
+            // navegando na triple store para pegar uma lista
+            //TripleStore store = new TripleStore();
+            //Graph graph = new Graph();
+            //var nTriplesParser = new NTriplesParser();
+            //UriLoader.Load(graph, new Uri("http://dbpedia.org/resource/List_of_ongoing_armed_conflicts"), nTriplesParser);
+            //store.Add(graph);
             // store.Triples as the conflicts itself?
+
+            // Cities
+            SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new Uri("http://dbpedia.org/sparql"));
+            String query = @"DESCRIBE ?City WHERE { ?City a <http://dbpedia.org/ontology/City> } LIMIT 10";
+            var cities = endpoint.QueryWithResultGraph(query);
+
 
             Console.ReadKey();
         }

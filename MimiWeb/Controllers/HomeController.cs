@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Mimi.DBpedia.Access;
 using MimiWeb.Models;
 
 namespace MimiWeb.Controllers
@@ -11,6 +12,24 @@ namespace MimiWeb.Controllers
     public class HomeController : Controller
     {
         public IActionResult Index()
+        {
+            var cityResourceRepository = new CityResourceRepository();
+
+            var cities = cityResourceRepository.GetCities();
+
+            return View(cities);
+        }
+
+        public IActionResult Details(string cityResource)
+        {
+            var cityResourceRepository = new CityResourceRepository();
+
+            var cities = cityResourceRepository.GetCityInfo(cityResource);
+
+            return View(cities);
+        }
+
+        public IActionResult Help()
         {
             return View();
         }
