@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using VDS.RDF;
 using VDS.RDF.Query;
 
 namespace Mimi.DBpedia.Access
@@ -11,12 +12,71 @@ namespace Mimi.DBpedia.Access
         public List<CityTile> GetCities()
         {
             SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new Uri("http://dbpedia.org/sparql"));
-            String query = "SELECT ?City WHERE { ?City a <http://dbpedia.org/ontology/City> } LIMIT 200";
+            //String query = "SELECT ?City ?label WHERE { ?City a <http://dbpedia.org/ontology/City> . ?City rdfs:label ?label . } LIMIT 200";
+            string query = $@"SELECT ?City, ?label, (COUNT(?City) as ?CityCount) WHERE {{ 
+                                    ?City a <http://dbpedia.org/ontology/City>.
+                                    ?City rdfs:label ?label.
+                                    ?thing dbo:location ?City.
+                                optional
+                                {{
+                                    ?thing a ?type.
+                                    VALUES ?type {{<http://dbpedia.org/ontology/Hotel>}}
+                                    BIND('Hotel' as ?typeName )
+                                }}
+                                optional
+                                {{
+                                    ?thing a ?type.
+                                    VALUES ?type {{ dbo:Museum}}
+                                    BIND('Museum' as ?typeName )
+                                }}
+                                optional
+                                {{
+                                    ?thing a ?type.
+                                    VALUES ?type {{ dbo:Pyramid}}
+                                    BIND('Pyramid' as ?typeName )
+                                }}
+                                optional
+                                {{
+                                    ?thing a ?type.
+                                    VALUES ?type {{ yago:Skyscraper104233124 }}
+                                    BIND('Skyscraper' as ?typeName )
+                                }}
+                                optional
+                                {{
+                                    ?thing a ?type.
+                                    VALUES ?type {{ dbo:Park }}
+                                    BIND('Park' as ?typeName )
+                                }}
+                                optional
+                                {{
+                                    ?thing a ?type.
+                                    VALUES ?type {{ yago:Church103028079 }}
+                                    BIND('Church' as ?typeName )
+                                }}
+                                optional
+                                {{
+                                    ?thing a ?type.
+                                    VALUES ?type {{ dbo:HistoricPlace}}
+                                    BIND ('Historic Place' as ?typeName )
+                                }}
+                                {{
+                                    ?thing a dbo:Place
+                                }}
+                                filter (BOUND (?type))
+                                FILTER (lang(?label) = 'en')
+                            }}
+                            GROUP BY ?City ?label
+                            HAVING(COUNT(?City) > 30)
+                            ORDER BY DESC (?CityCount)
+                            LIMIT 200";
+            query = query.Replace("\r\n", "");
+
             var cities = endpoint.QueryWithResultSet(query);
 
             return cities.Results.Select(x => new CityTile
             {
-                Name = x["City"].ToString(),
+                Name =  (x["label"] as ILiteralNode).Value,
+                PointsOfInterestCount = (x["CityCount"] as ILiteralNode).Value,
                 ResourceName = x["City"].ToString()
             }).ToList();
         }

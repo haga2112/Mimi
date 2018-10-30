@@ -24,9 +24,9 @@ namespace MimiWeb.Controllers
         {
             var cityResourceRepository = new CityResourceRepository();
 
-            var cities = cityResourceRepository.GetCityInfo(cityResource);
+            var citiesInto = cityResourceRepository.GetCityInfo(cityResource);
 
-            return View(cities);
+            return View(citiesInto);
         }
 
         public IActionResult Help()

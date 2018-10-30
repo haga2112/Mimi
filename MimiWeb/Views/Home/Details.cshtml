@@ -13,7 +13,14 @@
 
 <h4>@Model.Summary</h4>
 
-@foreach (var poi in Model.PointOfInterests)
+@if (Model.PointOfInterests.Any())
 {
-    <p>@poi.Label | @poi.TypeName | @poi.Resource</p>
+    foreach (var poi in Model.PointOfInterests)
+    {
+        <p>@poi.Label | @poi.TypeName | @poi.Resource</p> 
+    }
+}
+else
+{
+    <h2>No Results :(</h2>
 }

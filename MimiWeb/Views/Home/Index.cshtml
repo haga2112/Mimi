@@ -11,7 +11,7 @@
 @foreach (var item in Model)
 {
     <p>
-        @Html.ActionLink(item.Name, "Details", "Home", new { cityResource = item.ResourceName });
+        @Html.ActionLink($"{item.Name} - {item.PointsOfInterestCount}", "Details", "Home", new { cityResource = item.ResourceName });
     </p>
 }
 
