@@ -12,10 +12,14 @@ namespace Mimi.DBpedia.Access
         public List<CityTile> GetCities()
         {
             SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new Uri("http://dbpedia.org/sparql"));
-            //String query = "SELECT ?City ?label WHERE { ?City a <http://dbpedia.org/ontology/City> . ?City rdfs:label ?label . } LIMIT 200";
-            string query = $@"SELECT ?City, ?label, (COUNT(?City) as ?CityCount) WHERE {{ 
+            
+            string query = $@"SELECT ?City, ?label, ?depiction, ?abstract, ?country, ?flag, (COUNT(?City) as ?CityCount) WHERE {{ 
                                     ?City a <http://dbpedia.org/ontology/City>.
                                     ?City rdfs:label ?label.
+                                    ?City dbo:abstract ?abstract.
+                                    ?City dbo:country ?country.
+                                    optional {{ ?country dbo:thumbnail ?flag. }}
+                                    optional {{ ?City foaf:depiction ?depiction. }}
                                     ?thing dbo:location ?City.
                                 optional
                                 {{
@@ -64,9 +68,10 @@ namespace Mimi.DBpedia.Access
                                 }}
                                 filter (BOUND (?type))
                                 FILTER (lang(?label) = 'en')
+                                FILTER (lang(?abstract) = 'en')
                             }}
-                            GROUP BY ?City ?label
-                            HAVING(COUNT(?City) > 30)
+                            GROUP BY ?City ?label ?depiction ?abstract ?country ?flag
+                            HAVING (COUNT(?City) > 30)
                             ORDER BY DESC (?CityCount)
                             LIMIT 200";
             query = query.Replace("\r\n", "");
