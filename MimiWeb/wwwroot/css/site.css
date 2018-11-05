@@ -28,6 +28,11 @@ body {
     margin: 15px;
 }
 
+.tile-body {
+    min-height: 200px;
+    max-height: 200px;
+}
+
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {
     /* Hide captions */

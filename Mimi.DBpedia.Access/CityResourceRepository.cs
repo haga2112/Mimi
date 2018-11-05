@@ -73,17 +73,32 @@ namespace Mimi.DBpedia.Access
                             GROUP BY ?City ?label ?depiction ?abstract ?country ?flag
                             HAVING (COUNT(?City) > 30)
                             ORDER BY DESC (?CityCount)
-                            LIMIT 200";
+                            LIMIT 50";
             query = query.Replace("\r\n", "");
 
-            var cities = endpoint.QueryWithResultSet(query);
+            var result = new List<CityTile>();
 
-            return cities.Results.Select(x => new CityTile
+            try
             {
-                Name =  (x["label"] as ILiteralNode).Value,
-                PointsOfInterestCount = (x["CityCount"] as ILiteralNode).Value,
-                ResourceName = x["City"].ToString()
-            }).ToList();
+                var cities = endpoint.QueryWithResultSet(query);
+
+                result = cities.Results.Select(x => new CityTile
+                {
+                    Name = (x["label"] as ILiteralNode).Value,
+                    PointsOfInterestCount = (x["CityCount"] as ILiteralNode).Value,
+                    ResourceName = x["City"].ToString(),
+                    Image = (x["depiction"] as IUriNode)?.Uri,
+                    Abstract = (x["abstract"] as ILiteralNode).Value,
+                    CountryFlag = (x["flag"] as IUriNode)?.Uri,
+                }).ToList();
+            }
+            catch (Exception ex)
+            {
+                // log ex
+                //throw;
+            }
+
+            return result;
         }
 
         public CityInfo GetCityInfo(string cityResource)

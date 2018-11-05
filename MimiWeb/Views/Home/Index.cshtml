@@ -6,21 +6,21 @@
     ViewData["Title"] = "Index";
 }
 
-<h2>Cidades da Wikipedia com maior número de atrações de interesse</h2>
+<h2>Cidades da Wikipedia com maior número de atrações</h2>
 
 <div class="row">
 
     @foreach (var item in Model)
     {
         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-            <div class="panel panel-primary">
-                <div class="panel-body" style="min-height: 200px; max-height: 200px">
-                    <h4>
-                        @Html.ActionLink($"{item.Name}", "Details", "Home", new { cityResource = item.ResourceName }, new { @class = "" }) <span class="badge pull-right">@item.PointsOfInterestCount</span>
-                    </h4>
+            <a asp-controller="Home" asp-action="Details" asp-route-cityResource="@item.ResourceName" style="text-decoration: none;">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">@item.Name <span class="badge pull-right">@item.PointsOfInterestCount</span></div>
+                    <div class="panel-body">
+                        <div class="tile-body block-with-text">@item.Abstract</div>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
     }
 </div>
-
