@@ -4,8 +4,5 @@
 // Write your JavaScript code.
 
 $(document).ready(function ($) {
-    $(".block-with-text").dotdotdot({
-        // Options go here
-    });
 
 });

@@ -9,18 +9,36 @@
 <h2>Cidades da Wikipedia com maior número de atrações</h2>
 
 <div class="row">
-
-    @foreach (var item in Model)
+    @if (Model.Any())
     {
-        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-            <a asp-controller="Home" asp-action="Details" asp-route-cityResource="@item.ResourceName" style="text-decoration: none;">
+        foreach (var item in Model)
+        {
+            var guid = Guid.NewGuid();
+
+            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
                 <div class="panel panel-primary">
                     <div class="panel-heading">@item.Name <span class="badge pull-right">@item.PointsOfInterestCount</span></div>
                     <div class="panel-body">
-                        <div class="tile-body block-with-text">@item.Abstract</div>
+                        <div class="tile-body block-with-text" id="@guid">@item.Abstract</div>
+                        <hr />
+                        <a asp-controller="Home" asp-action="Details" asp-route-cityResource="@item.ResourceName">
+                            <img src="@item.CountryFlag?.OriginalString" alt="Alternate Text" class="img-responsive" style="max-height:120px"/>
+                        </a>
                     </div>
                 </div>
-            </a>
-        </div>
+            </div>
+
+            <script type="text/javascript">
+                var lastElementId = $(".block-with-text").last().prop("id");
+
+                $("#" + lastElementId).dotdotdot({
+                    // Options go here
+                });
+            </script>
+        }
+    }
+    else
+    {
+        <h3>Moiô</h3>
     }
 </div>
