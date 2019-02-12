@@ -2,6 +2,7 @@
 using VDS.RDF;
 using VDS.RDF.Parsing;
 using VDS.RDF.Query;
+using VDS.RDF.Writing;
 
 namespace ConsoleApp
 {
@@ -10,14 +11,20 @@ namespace ConsoleApp
         static void Main(string[] args)
         {
             // tipos de graph e hello world
-            //IGraph g = new Graph();
-            //IUriNode dotnetRDF = g.CreateUriNode(UriFactory.Create("http://www.dotnetrdf.org"));
-            //IUriNode says = g.CreateUriNode(UriFactory.Create("http://example.org/says"));
-            //ILiteralNode helloWorld = g.CreateLiteralNode("Hello World");
-            //ILiteralNode bonjourMonde = g.CreateLiteralNode("Bonjour tout le Monde", "fr");
+            IGraph g = new Graph();
+            IUriNode dotnetRDF = g.CreateUriNode(UriFactory.Create("http://www.dotnetrdf.org"));
+            IUriNode says = g.CreateUriNode(UriFactory.Create("http://example.org/says"));
+            ILiteralNode helloWorld = g.CreateLiteralNode("Hello World");
+            ILiteralNode bonjourMonde = g.CreateLiteralNode("Bonjour tout le Monde", "fr");
 
-            //g.Assert(new Triple(dotnetRDF, says, helloWorld));
-            //g.Assert(new Triple(dotnetRDF, says, bonjourMonde));
+            ////g.Assert(new Triple(dotnetRDF, says, bonjourMonde));
+            var dotnetRDFSaysHelloWorld = new Triple(dotnetRDF, says, helloWorld);
+            g.Assert(dotnetRDFSaysHelloWorld);
+            //g.Retract(dotnetRDFSaysHelloWorld);
+
+            RdfXmlWriter rdfxmlwriter = new RdfXmlWriter();
+            rdfxmlwriter.Save(g, "Example.rdf");            
+
 
             // somente para debug
             //foreach (Triple t in graph.Triples)

@@ -116,9 +116,12 @@ namespace Mimi.DBpedia.Access
         public List<CityPointOfInterest> GetPointsOfInterest(string cityResource)
         {
             SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new Uri("http://dbpedia.org/sparql"));
-            
-            String query = $@"select ?thing ?type ?typeName where {{
+
+            String query = $@"select distinct ?thumbnail ?typeName ?type ?label ?comment ?thing where {{
                                 VALUES ?city {{<{cityResource}>}}
+                                    ?thing dbo:thumbnail ?thumbnail.
+                                    ?thing rdfs:label ?label.
+                                    ?thing rdfs:comment ?comment.
                                     ?thing dbo:location ?city.
                                 optional 
                                 {{
@@ -126,7 +129,7 @@ namespace Mimi.DBpedia.Access
                                     VALUES ?type {{<http://dbpedia.org/ontology/Hotel>}}
                                     BIND( 'Hotel' as ?typeName )
                                 }}
-                                    optional
+                                optional
                                 {{
                                     ?thing a ?type.
                                     VALUES ?type
@@ -168,7 +171,10 @@ namespace Mimi.DBpedia.Access
                                 }}
 
                                 filter(BOUND (?type))
-                            }}";
+                                FILTER (lang(?label) = 'en')
+                                FILTER (lang(?comment) = 'en')
+                            }}
+                            GROUP BY ?thumbnail ?typeName ?type ?label ?comment ?thing";                                
 
             query = query.Replace("\r\n", "");
 
@@ -176,8 +182,11 @@ namespace Mimi.DBpedia.Access
 
             return pointsOfInterest.Results.Select(x => new CityPointOfInterest
             {
-                Label = x["thing"].ToString(),
+                Thumbnail = (x["thumbnail"] as IUriNode)?.Uri,
                 TypeName = x["typeName"].ToString(),
+                Type = x["type"].ToString(),
+                Label = (x["label"] as ILiteralNode)?.Value,
+                Comment = (x["comment"] as ILiteralNode)?.Value,
                 Resource = x["thing"].ToString(),
             }).ToList();
         }

@@ -20,13 +20,14 @@ namespace MimiWeb.Controllers
             return View(cities);
         }
 
-        public IActionResult Details(string cityResource)
+        public IActionResult Details(string cityName, string cityResource)
         {
             var cityResourceRepository = new CityResourceRepository();
 
-            var citiesInto = cityResourceRepository.GetCityInfo(cityResource);
+            var cityInto = cityResourceRepository.GetCityInfo(cityResource);
+            cityInto.Name = cityName;
 
-            return View(citiesInto);
+            return View(cityInto);
         }
 
         public IActionResult Help()
@@ -36,7 +37,7 @@ namespace MimiWeb.Controllers
 
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
+            ViewData["Message"] = "This is the Use Case Study of my postgraduate degree in 'Tecnologias e Inovações Web' course from SENAC.";
 
             return View();
         }

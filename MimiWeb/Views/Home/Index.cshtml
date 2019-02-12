@@ -21,8 +21,20 @@
                     <div class="panel-body">
                         <div class="tile-body block-with-text" id="@guid">@item.Abstract</div>
                         <hr />
-                        <a asp-controller="Home" asp-action="Details" asp-route-cityResource="@item.ResourceName">
-                            <img src="@item.CountryFlag?.OriginalString" alt="Alternate Text" class="img-responsive" style="max-height:120px"/>
+                        <a asp-controller="Home" asp-action="Details" asp-route-cityName="@item.Name" asp-route-cityResource="@item.ResourceName">
+                            
+                                @if (!string.IsNullOrEmpty(item.CountryFlag?.OriginalString))
+                                {
+                                    <img src="@item.CountryFlag?.OriginalString" alt="Alternate Text" class="img-responsive" 
+                                         style="max-height:120px; min-height: 120px; margin-left: auto; margin-right: auto;"/>
+                                }
+                                else
+                                {
+                                    <div style="text-align: center; min-height: 120px">
+                                        <i class="glyphicon glyphicon-globe gi-4x" style="padding-top: 30px"></i>
+                                    </div>
+                                }
+
                         </a>
                     </div>
                 </div>
@@ -39,6 +51,6 @@
     }
     else
     {
-        <h3>Moiô</h3>
+        <h3>Failed :(</h3>
     }
 </div>

@@ -7,7 +7,7 @@
     ViewData["Title"] = "Details";
 }
 
-<h2>Details</h2>
+<h1>City details with Points of Interest</h1>
 
 <h3>@Model.Name</h3>
 
@@ -15,10 +15,80 @@
 
 @if (Model.PointOfInterests.Any())
 {
-    foreach (var poi in Model.PointOfInterests)
-    {
-        <p>@poi.Label | @poi.TypeName | @poi.Resource</p> 
-    }
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <td>
+                    Image
+                </td>
+                <td></td>
+                <td>
+                    Point Of Interest
+                </td>
+                <td>
+                    Summary
+                </td>
+                <td>
+                    Link
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var poi in Model.PointOfInterests)
+            {
+                <tr>
+                    <td>
+                        @if (!string.IsNullOrEmpty(poi.Thumbnail?.OriginalString))
+                        {
+                            <img src="@poi.Thumbnail?.OriginalString" alt="Image" class="img-responsive"
+                                 style="max-height:100px; min-height: 100px; margin-left: auto; margin-right: auto;" />
+                        }
+                        else
+                        {
+                            <div style="text-align: center; min-height: 100px">
+                                <i class=".glyphicon glyphicon-eye-close gi-2x" style="padding-top: 20px"></i>
+                            </div>
+                        }
+                    </td>
+                    <td>
+                        <div style="margin-top: 15px;">
+                            @switch (poi.TypeName)
+                            {
+                                case "Hotel":
+                                    <i class="glyphicon glyphicon-home gi-2x" title="Hotel"></i>
+                                    break;
+                                case "Museum":
+                                    <i class="glyphicon glyphicon-pushpin gi-2x" title="Museum"></i>
+                                    break;
+                                case "Pyramid":
+                                    <i class="glyphicon glyphicon-eject gi-2x" title="Pyramid"></i>
+                                    break;
+                                case "Skyscraper":
+                                    <i class="glyphicon glyphicon-tower gi-2x" title="Skyscraper"></i>
+                                    break;
+                                case "Park":
+                                    <i class="glyphicon glyphicon-tree-conifer gi-2x" title="Park"></i>
+                                    break;
+                                case "Church":
+                                    <i class="glyphicon glyphicon-plus gi-2x" title="Church"></i>
+                                    break;
+                                case "Historic Place":
+                                    <i class="glyphicon glyphicon-flag gi-2x" title="Historic Place"></i>
+                                    break;
+                                default:
+                                    break;
+                            }
+                        </div>
+                    </td>
+
+                    <td><h4>@poi.Label</h4></td>
+                    <td><p>@poi.Comment</p></td>
+                    <td><a href="@poi.Resource" target="_top"><i class="glyphicon glyphicon-eye-open"></i></a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
 else
 {
