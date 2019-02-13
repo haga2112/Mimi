@@ -9,11 +9,7 @@ namespace Mimi.DBpedia.Access
 {
     public class CityResourceRepository
     {
-        public List<CityTile> GetCities()
-        {
-            SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new Uri("http://dbpedia.org/sparql"));
-            
-            string query = $@"SELECT ?City, ?label, ?depiction, ?abstract, ?country, ?flag, (COUNT(?City) as ?CityCount) WHERE {{ 
+        readonly string GetCitiesQuerty = $@"SELECT ?City, ?label, ?depiction, ?abstract, ?country, ?flag, (COUNT(?City) as ?CityCount) WHERE {{ 
                                     ?City a <http://dbpedia.org/ontology/City>.
                                     ?City rdfs:label ?label.
                                     ?City dbo:abstract ?abstract.
@@ -74,51 +70,9 @@ namespace Mimi.DBpedia.Access
                             HAVING (COUNT(?City) > 30)
                             ORDER BY DESC (?CityCount)
                             LIMIT 50";
-            query = query.Replace("\r\n", "");
 
-            var result = new List<CityTile>();
-
-            try
-            {
-                var cities = endpoint.QueryWithResultSet(query);
-
-                result = cities.Results.Select(x => new CityTile
-                {
-                    Name = (x["label"] as ILiteralNode).Value,
-                    PointsOfInterestCount = (x["CityCount"] as ILiteralNode).Value,
-                    ResourceName = x["City"].ToString(),
-                    Image = (x["depiction"] as IUriNode)?.Uri,
-                    Abstract = (x["abstract"] as ILiteralNode).Value,
-                    CountryFlag = (x["flag"] as IUriNode)?.Uri,
-                }).ToList();
-            }
-            catch (Exception ex)
-            {
-                // log ex
-                //throw;
-            }
-
-            return result;
-        }
-
-        public CityInfo GetCityInfo(string cityResource)
-        {
-            var cityInfo = new CityInfo();
-
-            // TODO: implementar busca das informações da cidade usando sparql se ela não estiver em alguma store local (salva em cache)
-            cityInfo.Name = cityResource;
-            cityInfo.Summary = cityResource;
-            cityInfo.PointOfInterests = GetPointsOfInterest(cityResource);
-
-            return cityInfo;
-        }
-
-        public List<CityPointOfInterest> GetPointsOfInterest(string cityResource)
-        {
-            SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new Uri("http://dbpedia.org/sparql"));
-
-            String query = $@"select distinct ?thumbnail ?typeName ?type ?label ?comment ?thing where {{
-                                VALUES ?city {{<{cityResource}>}}
+        readonly string GetPointsOfInterestQuery = @"select distinct ?thumbnail ?typeName ?type ?label ?comment ?thing where {{
+                                VALUES ?city {{<{0}>}}
                                     ?thing dbo:thumbnail ?thumbnail.
                                     ?thing rdfs:label ?label.
                                     ?thing rdfs:comment ?comment.
@@ -174,7 +128,56 @@ namespace Mimi.DBpedia.Access
                                 FILTER (lang(?label) = 'en')
                                 FILTER (lang(?comment) = 'en')
                             }}
-                            GROUP BY ?thumbnail ?typeName ?type ?label ?comment ?thing";                                
+                            GROUP BY ?thumbnail ?typeName ?type ?label ?comment ?thing";
+
+        public List<CityTile> GetCities()
+        {
+            SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new Uri("http://dbpedia.org/sparql"));
+                        
+            var query = GetCitiesQuerty.Replace("\r\n", "");
+
+            var result = new List<CityTile>();
+
+            try
+            {
+                var cities = endpoint.QueryWithResultSet(query);
+
+                result = cities.Results.Select(x => new CityTile
+                {
+                    Name = (x["label"] as ILiteralNode).Value,
+                    PointsOfInterestCount = (x["CityCount"] as ILiteralNode).Value,
+                    ResourceName = x["City"].ToString(),
+                    Image = (x["depiction"] as IUriNode)?.Uri,
+                    Abstract = (x["abstract"] as ILiteralNode).Value,
+                    CountryFlag = (x["flag"] as IUriNode)?.Uri,
+                }).ToList();
+            }
+            catch (Exception ex)
+            {
+                // log ex
+                //throw;
+            }
+
+            return result;
+        }
+
+        public CityInfo GetCityInfo(string cityResource)
+        {
+            var cityInfo = new CityInfo();
+
+            // TODO: implementar busca das informações da cidade usando sparql se ela não estiver em alguma store local (salva em cache)
+            cityInfo.Name = cityResource;
+            cityInfo.Summary = cityResource;
+            cityInfo.PointOfInterests = GetPointsOfInterest(cityResource);
+
+            return cityInfo;
+        }
+
+        public List<CityPointOfInterest> GetPointsOfInterest(string cityResource)
+        {
+            SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new Uri("http://dbpedia.org/sparql"));
+
+            var query = string.Format(GetPointsOfInterestQuery, cityResource);
 
             query = query.Replace("\r\n", "");
 
