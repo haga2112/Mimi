@@ -183,8 +183,8 @@ namespace Mimi.DBpedia.Access
             return pointsOfInterest.Results.Select(x => new CityPointOfInterest
             {
                 Thumbnail = (x["thumbnail"] as IUriNode)?.Uri,
-                TypeName = x["typeName"].ToString(),
-                Type = x["type"].ToString(),
+                TypeName = x["typeName"]?.ToString(),
+                Type = x["type"]?.ToString(),
                 Label = (x["label"] as ILiteralNode)?.Value,
                 Comment = (x["comment"] as ILiteralNode)?.Value,
                 Resource = x["thing"].ToString(),
