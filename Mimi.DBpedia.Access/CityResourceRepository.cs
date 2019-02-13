@@ -132,7 +132,7 @@ namespace Mimi.DBpedia.Access
 
         public List<CityTile> GetCities()
         {
-            SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new Uri("http://dbpedia.org/sparql"));
+            var endpoint = new SparqlRemoteEndpoint(new Uri("http://dbpedia.org/sparql"));
                         
             var query = GetCitiesQuerty.Replace("\r\n", "");
 
@@ -175,7 +175,7 @@ namespace Mimi.DBpedia.Access
 
         public List<CityPointOfInterest> GetPointsOfInterest(string cityResource)
         {
-            SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new Uri("http://dbpedia.org/sparql"));
+            var endpoint = new SparqlRemoteEndpoint(new Uri("http://dbpedia.org/sparql"));
 
             var query = string.Format(GetPointsOfInterestQuery, cityResource);
 
